@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Album;
 use App\Models\Photo;
+use Inertia\Inertia;
 
 class AlbumController extends Controller
 {
@@ -90,6 +91,32 @@ class AlbumController extends Controller
         $album = Album::findOrFail($id);
         $album->delete();
         return response()->json(['message' => 'Album deleted successfully']);
+    }
+
+    public function getAlbumPhotos(Request $request,$id) {
+        $user = $request->user();  
+        $perPage = $request->get('per_page', 5);      
+        //$albums = Photo::with('albums')->where(['user_id'=>$user->id, 'album_id' => $id])->paginate($perPage);
+        // $photosInAlbum = Photo::whereHas('albums', function ($query) use ($id) {
+        //     $query->where('album_id', $id);
+        // })->paginate($perPage);
+        $photosInAlbum = Album::with('photos')
+                ->join('album_photo', 'albums.id', '=', 'album_photo.album_id')
+                ->join('photos', 'album_photo.photo_id', '=', 'photos.id')
+                ->select('albums.title', 'albums.id as album_id','albums.layout', 'photos.*') // Select columns from the albums table
+                ->where('album_id', $id)
+                ->orderBy('albums.created_at', 'desc') // Order by creation date, adjust as needed
+                ->paginate($perPage);
+        return response()->json($photosInAlbum);
+    }
+
+    public function albumDashboard(Request $request, $id=null) {
+        $user = $request->user();
+
+        $album = $user->albums()->get();
+        // echo "test";
+        
+        return Inertia::render('AlbumDashboard', [ 'albumId' => $id, 'album' => $album]);   
     }
 }
 
