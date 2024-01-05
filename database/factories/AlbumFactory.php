@@ -24,6 +24,7 @@ class AlbumFactory extends Factory
         return [
             'title' => $this->faker->sentence(2),
             'description' => $this->faker->realText(50),
+            'layout' => $this->faker->randomDigitNotNull();
         ];
     }
 }
