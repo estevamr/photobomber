@@ -3,68 +3,69 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\AlbumRequest;
 use App\Models\Album;
 use App\Models\Photo;
 use Inertia\Inertia;
 
 class AlbumController extends Controller
 {
-    
-    // public function __invoke(Request $request)
-    // {
-    //     /** @var User $user */
-    //     $user = $request->user();
-        
-    //     return $user->albums()->create([
-    //         'title' => $request->input('title'),
-    //         'description' => $request->input('description'),
-    //         'layout' => $request->input('layout'),
-    //     ]);
-        
-    // }
-    
+    /**
+     * Display a paginated list of albums with associated photos for the authenticated user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
-        //$albums = Album::latest()->paginate(10);
         $user = $request->user();
         
-        $albums = Album::with('photos')->where(['user_id'=>$user->id])->paginate();
+        $albums = Album::with('photos')->where(['user_id' => $user->id])->paginate();
         
         return response()->json($albums);
-
     }
 
-    public function store(Request $request)
+    /**
+     * Store a newly created album for the authenticated user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(AlbumRequest $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-        ]);
-        
-        $user = $request->user();
-        
+            
+        $user = $request->user(); 
         $album = $user->albums()->create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
             'layout' => $request->input('layout'),
         ]);
-        
 
         return response()->json($album, 201);
     }
 
+    /**
+     * Display the specified album with associated photos.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show($id)
     {
         $album = Album::with('photos')->findOrFail($id);
         return response()->json($album);
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Update the specified album details.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function update(AlbumRequest $request, $id)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-        ]);
-
-        $album = Album::findOrFail($request->input('id'));
+        $album = Album::findOrFail($id);
         $album->update([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
@@ -74,18 +75,27 @@ class AlbumController extends Controller
         return response()->json($album);
     }
 
-    public function addPhotoToAlbum(Request $request) {
+    /**
+     * Add a photo to a specific album.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addPhotoToAlbum(Request $request)
+    {
         $album = Album::findOrFail($request->input('albumId'));
-        $photo = Photo::findOrFail($request->input('photoId'));
-        if(1==1){
-            return response()->json(
-                $album->photos()->save($photo)
-                
-            );
-        }
-        
+        $photo = Photo::findOrFail($request->input('photoId'));       
+        return response()->json(
+            $album->photos()->save($photo)
+        );     
     }
 
+    /**
+     * Remove the specified album.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         $album = Album::findOrFail($id);
@@ -93,26 +103,38 @@ class AlbumController extends Controller
         return response()->json(['message' => 'Album deleted successfully']);
     }
 
-    public function getAlbumPhotos(Request $request,$id) {
-        $user = $request->user();  
-        $perPage = $request->get('per_page', 5);      
+    /**
+     * Retrieve paginated photos for a specific album.
+     *
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getAlbumPhotos(Request $request, $id)
+    {
+        $user = $request->user();
+        $perPage = $request->get('per_page', 5);
+
         $photosInAlbum = Photo::whereHas('albums', function ($query) use ($id) {
             $query->where('album_id', $id);
         })->paginate($perPage);
-        // $photosInAlbum = Album::with('photos')
-        //         ->join('album_photo', 'albums.id', '=', 'album_photo.album_id')
-        //         ->join('photos', 'album_photo.photo_id', '=', 'photos.id')
-        //         ->select('albums.title', 'albums.id as album_id','albums.layout', 'photos.*') // Select columns from the albums table
-        //         ->where('album_id', $id)
-        //         ->orderBy('albums.created_at', 'desc') // Order by creation date, adjust as needed
-        //         ->paginate($perPage);
+
         return response()->json($photosInAlbum);
     }
 
-    public function albumDashboard(Request $request, $id=null) {
+    /**
+     * Render the Inertia.js view for album dashboard.
+     * Used in the album dashboard view
+     *
+     * @param Request $request
+     * @param int|null $id
+     * @return \Inertia\Response
+     */
+    public function albumDashboard(Request $request, $id = null)
+    {
         $user = $request->user();
         $album = Album::findOrFail($id);
-        return Inertia::render('AlbumDashboard', [ 'albumId' => $id, 'album' => $album]);   
+
+        return Inertia::render('AlbumDashboard', ['albumId' => $id, 'album' => $album]);
     }
 }
-

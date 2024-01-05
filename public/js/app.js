@@ -13173,17 +13173,13 @@ __webpack_require__.r(__webpack_exports__);
       baseUrl: window.location.origin,
       photos: [],
       totalItems: 0,
-      perPage: null,
+      perPage: 0,
       currentPage: 1
     };
   },
   mounted: function mounted() {
     this.perPage = this.album.layout;
-    console.log("oi", this.perPage);
     this.fetchPhotos();
-  },
-  create: function create() {
-    this.fetchAlbum();
   },
   watch: {
     currentPage: function currentPage() {
@@ -13197,21 +13193,10 @@ __webpack_require__.r(__webpack_exports__);
       axios.get(window.location.origin + '/' + apiUrl).then(function (response) {
         _this.photos = response.data.data;
         _this.totalItems = response.data.total;
-        console.log(_this.photos, "oi");
       })["catch"](function (error) {
         console.error('Error fetching photos:', error);
       });
-    } // fetchAlbum() {
-    //     const apiUrl = `albumShow/${this.albumId}`;
-    //     axios.get(window.location.origin+'/'+apiUrl)
-    //         .then(response => {
-    //             this.album = response.data;
-    //             this.perPage = response.data.layout;
-    //         })
-    //         .catch(error => {
-    //             console.error('Error fetching photos:', error);
-    //         });
-    // },
+    }
   },
   components: {
     BreezeAuthenticatedLayout: _Layouts_Authenticated_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
@@ -14479,18 +14464,24 @@ var _hoisted_2 = {
   "class": "float-left font-semibold text-xl text-gray-800 leading-tight"
 };
 var _hoisted_3 = {
-  "class": "bg-gray-900 mx-auto h-screen"
+  "class": "bg-gray-900 py-16"
 };
 var _hoisted_4 = {
-  "class": "container mx-auto px-5 py-2 lg:px-32 lg:pt-24"
+  "class": "container mx-auto px-4"
 };
 var _hoisted_5 = {
-  "class": "-m-1 flex flex-wrap md:-m-2"
+  "class": "grid grid-cols-3 md:grid-cols-3 gap-8"
 };
 var _hoisted_6 = {
-  "class": "flex flex-wrap"
+  "class": "relative overflow-hidden"
 };
 var _hoisted_7 = ["src"];
+var _hoisted_8 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "absolute inset-0 bg-black opacity-40"
+}, null, -1 /* HOISTED */);
+var _hoisted_9 = {
+  "class": "flex items-center justify-center"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Head = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Head");
   var _component_pagination = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("pagination");
@@ -14505,19 +14496,19 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return _ctx.isModalVisible = !_ctx.isModalVisible;
         }),
         "class": "bg-gray-900 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 float-right"
-      }, " New Album ")])];
+      }, " Compile ")])];
     }),
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.photos, function (photo, index) {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_5, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.photos, function (photo, index) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", {
           key: index,
-          "class": "w-1/2 p-1 md:p-2"
-        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
-          alt: "gallery",
-          "class": "block w-full max-h-64 rounded-lg object-cover object-center hover:h-full",
+          "class": "bg-white rounded-lg shadow-lg p-2"
+        }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
+          "class": "object-cover w-full max-h-64",
           src: $data.baseUrl + '/uploads/' + photo.path
-        }, null, 8 /* PROPS */, _hoisted_7)]);
-      }), 128 /* KEYED_FRAGMENT */)), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"w-1/2 p-1 md:p-2\">\n                            <img\n                            alt=\"gallery\"\n                            class=\"block h-full w-full rounded-lg object-cover object-center\"\n                            src=\"https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(72).webp\" />\n                        </div>\n                        <div class=\"w-full p-1 md:p-2\">\n                            <img\n                            alt=\"gallery\"\n                            class=\"block h-full w-full rounded-lg object-cover object-center\"\n                            src=\"https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp\" />\n                        </div>\n                        </div>\n                        <div class=\"flex w-1/2 flex-wrap\">\n                            <div class=\"w-full p-1 md:p-2\">\n                                <img\n                                alt=\"gallery\"\n                                class=\"block h-full w-full rounded-lg object-cover object-center\"\n                                src=\"https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(74).webp\" />\n                            </div>\n                            <div class=\"w-1/2 p-1 md:p-2\">\n                                <img\n                                alt=\"gallery\"\n                                class=\"block h-full w-full rounded-lg object-cover object-center\"\n                                src=\"https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(75).webp\" />\n                            </div>\n                            <div class=\"w-1/2 p-1 md:p-2\">\n                                <img\n                                alt=\"gallery\"\n                                class=\"block h-full w-full rounded-lg object-cover object-center\"\n                                src=\"https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(77).webp\" />\n                            </div> ")])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {
+        }, null, 8 /* PROPS */, _hoisted_7), _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <div class=\"absolute inset-0 flex items-center justify-center\">\n                                <button @click=\"viewAlbum(album.id)\" class=\"bg-white text-gray-900 py-2 px-6 rounded-full font-bold hover:bg-gray-300\">View Album</button>\n                            </div> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <h3 class=\"text-xl font-bold text-gray-900 mt-4\">{{  album.title }}</h3>\n                        <p class=\"text-gray-500 text-sm mt-2\">{{  album.description }}</p>\n                        <div class=\"flex items-center justify-between mt-4\">\n                            <span class=\"text-gray-900 font-bold text-lg hover:text-blue-700 cursor-pointer\" @click=\"deleteAlbum(album.id)\">Delete</span>\n                            <button class=\"bg-gray-900 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800\" @click=\"editAlbum(album.id)\">Edit</button>\n                        </div> ")]);
+      }), 128 /* KEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_pagination, {
+        "class": "w-1/2",
         total: $data.totalItems,
         "per-page": $data.perPage,
         records: $data.totalItems,
@@ -14526,7 +14517,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return $data.currentPage = $event;
         }),
         onInput: $options.fetchPhotos
-      }, null, 8 /* PROPS */, ["total", "per-page", "records", "modelValue", "onInput"])])])];
+      }, null, 8 /* PROPS */, ["total", "per-page", "records", "modelValue", "onInput"])])])])];
     }),
     _: 1 /* STABLE */
   })], 64 /* STABLE_FRAGMENT */);
@@ -17614,7 +17605,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n* styles.css */\n\n/* Customize pagination container */\n.pagination {\n  display: flex;\n  justify-content: center;\n  margin-top: 20px;\n}\n\n/* Customize pagination item */\n.pagination li {\n  list-style: none;\n  display: inline-block;\n  margin: 0 5px;\n}\n\n/* Customize pagination link */\n.pagination a {\n  text-decoration: none;\n  padding: 5px 10px;\n  border: 1px solid #ddd;\n  color: #333;\n}\n\n/* Customize active page link */\n.pagination li.active a {\n  background-color: #007BFF;\n  color: #fff;\n  border-color: #007BFF;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n* styles.css */\n\n/* Customize pagination container */\n.pagination {\n  display: flex;\n  justify-content: center;\n  margin-top: 20px;\n  align-items: center;\n}\n.pagination .nav {\n    width: -moz-min-content;\n    width: min-content;\n}\n\n\n/* Customize pagination item */\n.pagination li {\n  list-style: none;\n  display: inline-block;\n  margin: 0 5px;\n}\n\n/* Customize pagination item */\n.pagination ul {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n}\n\n/* Customize pagination link */\n.pagination a input {\n  text-decoration: none;\n  padding: 5px 10px;\n  border: 1px solid #ddd;\n  color: #fff;\n}\n.page-link, .VuePagination__count {\n    color:#fff;\n}\n \n/* Customize active page link */\n.pagination li.active a input {\n  background-color: #007BFF;\n  color: #fff;\n  border-color: #007BFF;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
