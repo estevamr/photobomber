@@ -13165,19 +13165,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
-    albumId: ''
+    albumId: '',
+    album: {}
   },
   data: function data() {
     return {
-      album: {},
       baseUrl: window.location.origin,
       photos: [],
       totalItems: 0,
-      perPage: 5,
+      perPage: null,
       currentPage: 1
     };
   },
   mounted: function mounted() {
+    this.perPage = this.album.layout;
+    console.log("oi", this.perPage);
     this.fetchPhotos();
   },
   create: function create() {
@@ -13199,17 +13201,17 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.error('Error fetching photos:', error);
       });
-    },
-    fetchAlbum: function fetchAlbum() {
-      var _this2 = this;
-      var apiUrl = "albumShow/".concat(this.albumId);
-      axios.get(window.location.origin + '/' + apiUrl).then(function (response) {
-        _this2.album = response.data;
-        _this2.perPage = response.data.layout;
-      })["catch"](function (error) {
-        console.error('Error fetching photos:', error);
-      });
-    }
+    } // fetchAlbum() {
+    //     const apiUrl = `albumShow/${this.albumId}`;
+    //     axios.get(window.location.origin+'/'+apiUrl)
+    //         .then(response => {
+    //             this.album = response.data;
+    //             this.perPage = response.data.layout;
+    //         })
+    //         .catch(error => {
+    //             console.error('Error fetching photos:', error);
+    //         });
+    // },
   },
   components: {
     BreezeAuthenticatedLayout: _Layouts_Authenticated_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
@@ -13333,7 +13335,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       this.loadAlbums();
     },
     viewAlbum: function viewAlbum(id) {
-      window.location = "/albums/".concat(id);
+      window.location = "/albumDashboard/".concat(id);
     }
   },
   components: {
@@ -14497,8 +14499,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     title: "Dashboard"
   }), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_BreezeAuthenticatedLayout, null, {
     header: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      var _$data$album;
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$data$album = $data.album) === null || _$data$album === void 0 ? void 0 : _$data$album.title) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.perPage), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+      var _$props$album;
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)((_$props$album = $props.album) === null || _$props$album === void 0 ? void 0 : _$props$album.title) + " " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($data.perPage), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
         onClick: _cache[0] || (_cache[0] = function ($event) {
           return _ctx.isModalVisible = !_ctx.isModalVisible;
         }),

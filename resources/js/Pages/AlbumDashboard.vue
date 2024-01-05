@@ -77,27 +77,26 @@
     export default { 
         props: {
             albumId: '',
+            album: {},
         },  
         data() {
             return {    
-                album: {},
+                
                 baseUrl: window.location.origin,
                 photos: [],
                 totalItems: 0,
-                perPage: 5,
+                perPage: null,
                 currentPage: 1,
             };
         },
         mounted() {
-            
+            this.perPage = this.album.layout;
             this.fetchPhotos();
         },
-        create() {
-            this.fetchAlbum();
-        },
+        
         watch: {
             currentPage() {
-            this.fetchPhotos();
+                this.fetchPhotos();
             },
         },
 
@@ -111,21 +110,7 @@
 
                         this.photos = response.data.data;
                         this.totalItems = response.data.total;
-                        console.log(this.photos, "oi")
-                    })
-                    .catch(error => {
-                        console.error('Error fetching photos:', error);
-                    });
-            },
-            fetchAlbum() {
-                const apiUrl = `albumShow/${this.albumId}`;
-
-                axios.get(window.location.origin+'/'+apiUrl)
-                    .then(response => {
-
-                        this.album = response.data;
-                        this.perPage = response.data.layout;
-
+                 
                     })
                     .catch(error => {
                         console.error('Error fetching photos:', error);

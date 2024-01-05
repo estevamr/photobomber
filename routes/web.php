@@ -52,8 +52,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/album/{id}', [AlbumController::class, 'update']);
     Route::delete('/albumsList/{id}', [AlbumController::class, 'destroy']);
 
-    Route::get('/albumDashboard/{id}', [AlbumController::class, 'dashboard']);
+    Route::get('/albumDashboard/{id}', [AlbumController::class, 'albumDashboard']);
     Route::get('/albumPhotos/{id}', [AlbumController::class, 'getAlbumPhotos']);
+
 });
 
 

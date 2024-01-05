@@ -95,7 +95,7 @@ methods: {
         this.loadAlbums();
     },
     viewAlbum(id) {
-        window.location = `/albums/${id}`;
+        window.location = `/albumDashboard/${id}`;
     }
 },
 components: {
