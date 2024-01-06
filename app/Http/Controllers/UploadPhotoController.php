@@ -22,11 +22,9 @@ class UploadPhotoController extends Controller
     
     public function index(Request $request)
     {
+        $perPage = $request->get('per_page', 6);
         $user = $request->user();
-
-        $images = $user->photos()->get();
-        // echo "test";
-        
+        $images = $user->photos()->paginate($perPage);        
         return response()->json($images);
     }
 

@@ -3,36 +3,31 @@
     <div>
         <PhotoUploadForm @loadImages="loadImages" />
     </div>
-    <!-- <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> -->
+    <!-- <div class="flex items-center justify-center py-4 md:py-8 flex-wrap">
+        <button id="all_photos" type="button" @click="albumMenuClick(null)" class="text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800">All photos</button>
+        <button v-if="albumList.length" v-for="album in albumList" :id="album.id" type="button" @click="albumMenuClick(album.id)" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">{{ album.title }}</button>
+    </div> -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <!-- Loop through the photos and display them -->
-        <!-- <div v-for="image in photos" >
+        <div v-for="image in uploadedImages" :key="image.id">
             <img :src="'uploads/' + image.path" alt="Photo" class="rounded-md w-full h-48 object-cover">
         </div>
-    </div> -->
-    <div class="relative">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Loop through the photos and display them -->
-            <div v-for="photo in photos" :key="photo.id" class="relative group">
-                <img :src="`uploads/${photo.path}`" alt="Photo" class="rounded-md w-full h-48 object-cover transition-transform transform group-hover:scale-110">
-                <!-- Menu -->
-                <div  class="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 hidden group-hover:flex flex-col items-center justify-center">
-                    <a  @click="deleteImage(photo.id)" class="cursor-pointer text-white font-bold">Delete</a>
-                </div>
+    </div>
+    <!-- <div class="container mx-auto px-4">
+        <div class="bg-gray-900 flex-wrap my-8 grid grid-cols-3 md:grid-cols-3 gap-8">
+            <div v-for="image in uploadedImages" class="bg-white rounded-lg shadow-lg p-8">
+                <img :src="'uploads/' + image.path" alt="Image" class="object-cover w-full max-h-64"  >
+                Add to album 
+                <select @change="addPhotoToAlbum($event, image.id)">
+                    <option value="">Choose an album</option>
+                    <option v-if="albumList.length" v-for="album in albumList" :value="album.id">
+                        {{ album.title }}
+                    </option>         
+                </select>
+                <BreezeButton @click="deleteImage(image.id)">Delete</BreezeButton>
             </div>
         </div>
-    </div>
-
-    <div class="flex items-center justify-center">
-        <div class="w-1/2 inset-0 flex items-center justify-center">
-            <Pagination                            
-                :per-page="perPage"
-                :records="totalItems"
-                v-model="currentPage"
-                @paginate="loadImages"
-            />
-        </div>
-    </div>
-
+    </div>     -->
 </template>
 
 <script>
@@ -41,34 +36,26 @@
 import BreezeButton from '@/Components/Button.vue'
 import PhotoUploadForm from './Forms/PhotoUploadForm.vue'
 import Loader from '@/Components/Loader.vue';
-import Pagination from 'v-pagination-3';
 
 
 export default {
     components: {
         PhotoUploadForm,
         BreezeButton,
-        Loader,
-        Pagination
+        Loader
     },
     data() {
         return {
-           
+            images: [],
+            uploadedImages: [],
+            errors: [], 
             albumList: [],
             albumId: 0,
             loading: false,
-
-            photos: [],
-            totalItems: 0,
-            perPage: 6,
-            currentPage: 1,
-          
         }
     },
 
     methods: {
-      
-        
         async deleteImage(mediaId) {
             if (confirm('Are you sure you want to delete this image?')) {
                 try {
@@ -87,13 +74,11 @@ export default {
         },
 
         async loadImages() {
-            const url = `images?page=${this.currentPage}&per_page=${this.perPage}`;
+            const url = this.albumId ? `albumShow/${this.albumId}` : 'images';
             try {
                 this.loading = true;
                 const response = await axios.get(url);
-                this.totalItems = response.data.total;
-                this.photos = response.data.data;
-                
+                this.uploadedImages = this.albumId ? response.data.photos : response.data;
             }
             catch(error) {
                 console.error('Error loading images:', error);
@@ -152,52 +137,20 @@ export default {
 }
 </script>
 <style>
-* styles.css */
-
-/* Customize pagination container */
-.pagination {
+.row {
   display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  align-items: center;
+  flex-wrap: wrap;
+  padding: 0 4px;
 }
 
-.pagination .nav {
-    width: min-content;
+/* Create two equal columns that sits next to each other */
+.column {
+  flex: 50%;
+  padding: 0 4px;
 }
 
-/* Customize pagination item */
-.VuePagination ul {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-/* Customize pagination item */
-.pagination li {
-  list-style: none;
-  display: inline-block;
-  margin: 0 5px;
-}
-
-
-
-/* Customize pagination link */
-.pagination a input {
-  text-decoration: none;
-  padding: 5px 10px;
-  border: 1px solid #ddd;
-  color: #111827;
-}
-.page-link, .VuePagination__count {
-    color:#111827;
-}
- 
-/* Customize active page link */
-.pagination li.active a input {
-  background-color: #007BFF;
-  color: #111827;
-  border-color: #007BFF;
+.column img {
+  margin-top: 8px;
+  vertical-align: middle;
 }
 </style>
