@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UploadPhotoController;
 use App\Http\Controllers\AlbumController;
+use App\Http\Controllers\AlbumCompilationWebhookController;
 
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,18 +44,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/photos', UploadPhotoController::class);
     Route::post('/upload', [UploadPhotoController::class, 'upload']);
     Route::get('/images', [UploadPhotoController::class, 'index']);
-    Route::delete('/images/{id}', [UploadPhotoController::class, 'deleteImage']);
+    Route::delete('/images/{id}', [UploadPhotoController::class, 'destroy']);
 
     Route::get('/albumsList', [AlbumController::class, 'index']);
     Route::get('/albumShow/{id}', [AlbumController::class, 'show']);
-    Route::post('/albums', [AlbumController::class, 'store']);
+    Route::post('/album', [AlbumController::class, 'store']);
     Route::post('/addPhotoToAlbum', [AlbumController::class, 'addPhotoToAlbum']);
     Route::put('/album/{id}', [AlbumController::class, 'update']);
-    Route::delete('/albumsList/{id}', [AlbumController::class, 'destroy']);
+    Route::delete('/album/{id}', [AlbumController::class, 'destroy']);
 
     Route::get('/albumDashboard/{id}', [AlbumController::class, 'albumDashboard']);
     Route::get('/albumPhotos/{id}', [AlbumController::class, 'getAlbumPhotos']);
+    Route::delete('/album/remove/{id}/{id2}', [AlbumController::class, 'removePhotoFromAlbum']);
 
+    Route::put('/compileAlbum', [AlbumCompilationWebhookController::class, 'compileAlbum']);
 });
 
 

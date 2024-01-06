@@ -51,7 +51,7 @@ class UploadPhotoController extends Controller
         return response()->json(['images' => $images], 200);
     }
     
-    public function deleteImage($id) {
+    public function destroy($id) {
         $image = Photo::findOrFail($id);
         Storage::disk('public')->delete('images/' . $image->name);
 

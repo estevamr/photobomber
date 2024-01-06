@@ -6,9 +6,9 @@
         <template #header>
             <div class="container mx-auto px-4 h-10">
                 <h2 class="float-left font-semibold text-xl text-gray-800 leading-tight">
-                Albums {{ albumId }}
+                Albums 
                 </h2>
-                <button @click="isModalVisible=!isModalVisible" class="bg-gray-900 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 float-right">
+                <button @click="createAlbum" class="bg-gray-900 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 float-right">
                     New Album
                 </button>
             </div>            
@@ -23,6 +23,9 @@
                             <div class="absolute inset-0 bg-black opacity-40"></div>
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <button @click="viewAlbum(album.id)" class="bg-white text-gray-900 py-2 px-6 rounded-full font-bold hover:bg-gray-300">View Album</button>
+                            </div>
+                            <div class="inset-0 align-text-bottom">
+                                <span>Photos: {{ album.photos.length }}</span>
                             </div>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mt-4">{{  album.title }}</h3>
@@ -58,19 +61,28 @@ props: {
 },  
 data() {
     return {    
-    newAlbum: {},    
-    albums: [],
-    pagination: {},
-    page: 1,
-    perPage: 20,
-    records: [],
-    isModalVisible: false
+        newAlbum: {},    
+        albums: [],
+        pagination: {},
+        page: 1,
+        perPage: 20,
+        records: [],
+        isModalVisible: false
     };
 },
 mounted() {
     this.loadAlbums();
 },
-methods: {     
+methods: {    
+    createAlbum() {
+        this.newAlbum = {
+            title: '',
+            description: '',
+            layout: 3
+        };
+        this.isModalVisible = true;
+    },
+
     async loadAlbums(page = 1) {
         const response = await axios.get(`albumsList?page=${page}`);
         this.albums = response.data.data;
@@ -86,14 +98,17 @@ methods: {
 
     async deleteAlbum(albumId) {
         if (confirm('Are you sure you want to delete this album?')) {
-            await axios.delete(`albumsList/${albumId}`);
+            await axios.delete(`album/${albumId}`);
             this.loadAlbums();
         }
     },
+
     closeModal() {
         this.isModalVisible = false;
+        this.newAlbum = {};
         this.loadAlbums();
     },
+
     viewAlbum(id) {
         window.location = `/albumDashboard/${id}`;
     }

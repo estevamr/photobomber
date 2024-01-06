@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/webhooks/compilation', AlbumCompilationWebhookController::class);
+// Route::post('/webhooks/compilation', AlbumCompilationWebhookController::class);
 Route::post('/upload', [UploadPhotoController::class, 'upload']);
 Route::post('/album', [AlbumController::class, 'store']);
 Route::get('/album', [AlbumController::class, 'index']);

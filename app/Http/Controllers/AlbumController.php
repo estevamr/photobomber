@@ -86,7 +86,7 @@ class AlbumController extends Controller
         $album = Album::findOrFail($request->input('albumId'));
         $photo = Photo::findOrFail($request->input('photoId'));       
         return response()->json(
-            $album->photos()->save($photo)
+            $album->photos()->attach($photo)
         );     
     }
 
@@ -134,7 +134,21 @@ class AlbumController extends Controller
     {
         $user = $request->user();
         $album = Album::findOrFail($id);
-
         return Inertia::render('AlbumDashboard', ['albumId' => $id, 'album' => $album]);
+    }
+
+    /**
+     * Remove a photo from a specific album.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removePhotoFromAlbum($id, $id2)
+    {
+        $photo = Photo::findOrFail($id);   
+        $album = Album::findOrFail($id2);    
+        return response()->json(
+            $album->photos()->detach($photo)
+        );     
     }
 }

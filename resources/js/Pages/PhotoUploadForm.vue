@@ -16,29 +16,21 @@
         <button id="all_photos" type="button" @click="albumMenuClick(null)" class="text-blue-700 hover:text-white border border-blue-600 bg-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800">All photos</button>
         <button v-if="albumList.length" v-for="album in albumList" :id="album.id" type="button" @click="albumMenuClick(album.id)" class="text-gray-900 border border-white hover:border-gray-200 dark:border-gray-900 dark:bg-gray-900 dark:hover:border-gray-700 bg-white focus:ring-4 focus:outline-none focus:ring-gray-300 rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:text-white dark:focus:ring-gray-800">{{ album.title }}</button>
     </div>
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-        <div v-for="image in uploadedImages" class="bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-            <img :src="'uploads/' + image.path" alt="Image" class="h-auto max-w-sm rounded-lg" >
-            Add to album 
-            <select @change="addPhotoToAlbum($event, image.id)">
-                <option v-if="albumList.length" v-for="album in albumList" :value="album.id" 
-                @change="">
-                    {{ album.title }}
-                </option>         
-            </select>
-            <BreezeButton @click="deleteImage(image.id)">Delete</BreezeButton>
-        </div>
-    </div>
-    <!-- <div class="p-5 sm:p-8">
-        <div class="columns-1 gap-5 sm:columns-2 sm:gap-8 md:columns-3 lg:columns-4 [&>img:not(:first-child)]:mt-8">
-            <div v-for="image in uploadedImages" class="bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-                <img :src="'uploads/' + image.path" alt="Image" class="img-rounded mb-3" style="width:100%">
-                <BreezeDropdown></BreezeDropdown>
+    <div class="container mx-auto px-4">
+        <div class="bg-gray-900 flex-wrap my-8 grid grid-cols-3 md:grid-cols-3 gap-8">
+            <div v-for="image in uploadedImages" class="bg-white rounded-lg shadow-lg p-8">
+                <img :src="'uploads/' + image.path" alt="Image" class="object-cover w-full max-h-64"  >
+                Add to album 
+                <select @change="addPhotoToAlbum($event, image.id)">
+                    <option v-if="albumList.length" v-for="album in albumList" :value="album.id" 
+                    @change="">
+                        {{ album.title }}
+                    </option>         
+                </select>
                 <BreezeButton @click="deleteImage(image.id)">Delete</BreezeButton>
             </div>
         </div>
-    </div> -->
-    
+    </div>    
 </template>
 
 <script>

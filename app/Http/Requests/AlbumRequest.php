@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+
+use App\Rules\NotInProgress;
 
 class AlbumRequest extends FormRequest
 {
@@ -23,8 +26,11 @@ class AlbumRequest extends FormRequest
     {
         return [
             'title' => 'required|string|max:255',
-            'description' => 'string',
-            'layout' => 'integer'
+            'description' => 'nullable|string',
+            'layout' => 'integer',
+            'id' => [
+                new NotInProgress,
+            ],            
         ];
     }
 }
