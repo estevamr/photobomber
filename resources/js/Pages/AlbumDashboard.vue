@@ -11,6 +11,7 @@
                 </button>
             </div>            
         </template>
+        <Loader :loading="loading"/>
         <div class="bg-gray-900 py-16">
             <div class="container mx-auto px-4">              
                 <div class="grid grid-cols-3 md:grid-cols-3 gap-8">
@@ -24,13 +25,14 @@
                     </div>
                 </div>
                 <div class="flex items-center justify-center">
-                    <pagination class="w-1/2 inset-0 flex items-center justify-center"
-                        :total="totalItems"
-                        :per-page="perPage"
-                        :records="totalItems"
-                        v-model="currentPage"
-                        @input="fetchPhotos"
-                    />
+                    <div class="w-1/2 inset-0 flex items-center justify-center">
+                        <pagination                            
+                            :per-page="perPage"
+                            :records="totalItems"
+                            v-model="currentPage"
+                            @paginate="fetchPhotos"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
@@ -39,83 +41,90 @@
 </template>
 <script>
 
-    import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
-    import { Head } from '@inertiajs/vue3';
-    import Pagination from 'v-pagination-3';
+import Loader from '@/Components/Loader.vue';
+import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
+import { Head } from '@inertiajs/vue3';
+import Pagination from 'v-pagination-3';
 
-    export default { 
-        props: {
-            albumId: '',
-            album: {},
-        },  
-        data() {
-            return {  
-                baseUrl: window.location.origin,
-                photos: [],
-                totalItems: 0,
-                perPage: 0,
-                currentPage: 1,
-            };
-        },
-        mounted() {
-            this.perPage = this?.album?.layout;
+export default { 
+    props: {
+        albumId: '',
+        album: {},
+    },  
+    data() {
+        return {  
+            baseUrl: window.location.origin,
+            photos: [],
+            totalItems: 0,
+            perPage: 0,
+            currentPage: 1,
+            loading: false,
+        };
+    },
+    mounted() {
+        this.perPage = this?.album?.layout;
+        this.fetchPhotos();
+    },
+    
+    watch: {
+        currentPage() {
             this.fetchPhotos();
         },
-        
-        watch: {
-            currentPage() {
+    },
+
+    methods: {
+        async fetchPhotos() {
+            const apiUrl = `albumPhotos/${this.albumId}?page=${this.currentPage}&per_page=${this.perPage}`;
+            try {
+                this.loading = true;
+                const response = await axios.get(this.baseUrl+'/'+apiUrl)
+                this.photos = response.data.data;
+                this.totalItems = response.data.total;
+            }
+            catch(error){
+                console.error('Error fetching photos:', error);
+            }
+            finally {
+                this.loading = false;
+            }
+        },
+
+        async removeFromAlbum(photoId) {
+            this.loading = true;
+            const apiUrl = `/album/remove/${photoId}/${this.albumId}`;
+            try {
+                const response = await axios.delete(this.baseUrl+apiUrl)
                 this.fetchPhotos();
-            },
+            }
+            catch(error){
+                console.error('Error while removing photos:', error);
+            }
+            finally {
+                this.loading = false;
+            }
         },
-
-        methods: {
-
-            fetchPhotos() {
-                const apiUrl = `albumPhotos/${this.albumId}?page=${this.currentPage}&per_page=${this.perPage}`;
-
-                axios.get(this.baseUrl+'/'+apiUrl)
-                    .then(response => {
-
-                        this.photos = response.data.data;
-                        this.totalItems = response.data.total;
-                 
-                    })
-                    .catch(error => {
-                        console.error('Error fetching photos:', error);
-                    });
-            },
-
-            removeFromAlbum(photoId) {
-                
-                const apiUrl = `/album/remove/${photoId}/${this.albumId}`;
-
-                axios.delete(this.baseUrl+apiUrl)
-                    .then(response => {
-
-                        this.fetchPhotos();
-                
-                    })
-                    .catch(error => {
-                        console.error('Error while removing photos:', error);
-                    });
-            },
-            async compileAlbum() {
-                try {
-                    if (this.albumId) {
-                        const compiled = await axios.put(`${this.baseUrl}/compileAlbum`, this.album);
-                    }
-                } catch(error){
-                    alert("Error while compiling:" + error.response.data.error);
+        async compileAlbum() {
+            try {
+                if (this.albumId) {
+                    this.loading = true;
+                    const compiled = await axios.put(`${this.baseUrl}/compileAlbum`, this.album);
                 }
-                
-            },
+            } catch(error){
+                alert("Error while compiling:" + error.response.data.error);
+            }
+            finally {
+                this.loading = false;
+            }
+            
         },
-        components: {
-            BreezeAuthenticatedLayout,
-            Head,
-            Pagination
-        },
-    }
+    },
+    components: {
+        BreezeAuthenticatedLayout,
+        Head,
+        Pagination,
+        Loader
+    },
+}
 </script>
 <style>
 * styles.css */

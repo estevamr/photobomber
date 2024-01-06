@@ -13,6 +13,7 @@
                 </button>
             </div>            
         </template>
+        <Loader :loading="loading"/>
         <div class="bg-gray-900 py-16">
             <div class="container mx-auto px-4">
                 <div class="grid grid-cols-3 md:grid-cols-3 gap-8">
@@ -47,77 +48,104 @@
     </BreezeAuthenticatedLayout>
 </template>
   
-  <script>
+<script>
 import axios from 'axios';
 import Pagination from 'vue-pagination-2';
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import AlbumForm from './Forms/AlbumForm';
 import { Head } from '@inertiajs/vue3';
+import Loader from '@/Components/Loader.vue';
 
 
 export default { 
-props: {
-    albumId: '',
-},  
-data() {
-    return {    
-        newAlbum: {},    
-        albums: [],
-        pagination: {},
-        page: 1,
-        perPage: 20,
-        records: [],
-        isModalVisible: false
-    };
-},
-mounted() {
-    this.loadAlbums();
-},
-methods: {    
-    createAlbum() {
-        this.newAlbum = {
-            title: '',
-            description: '',
-            layout: 3
+    props: {
+        albumId: '',
+    },  
+    data() {
+        return {    
+            newAlbum: {},    
+            albums: [],
+            isModalVisible: false,
+            loading: false,
         };
-        this.isModalVisible = true;
     },
-
-    async loadAlbums(page = 1) {
-        const response = await axios.get(`albumsList?page=${page}`);
-        this.albums = response.data.data;
-        this.pagination = response.data;
-    },
-    
-    async editAlbum(albumId) {
-        const response = await axios.get(`albumShow/${albumId}`);
-        this.newAlbum = response.data;
-        this.isModalVisible = true;
-    
-    },
-
-    async deleteAlbum(albumId) {
-        if (confirm('Are you sure you want to delete this album?')) {
-            await axios.delete(`album/${albumId}`);
-            this.loadAlbums();
-        }
-    },
-
-    closeModal() {
-        this.isModalVisible = false;
-        this.newAlbum = {};
+    mounted() {
         this.loadAlbums();
     },
+    methods: {    
+        createAlbum() {
+            this.newAlbum = {
+                title: '',
+                description: '',
+                layout: 3
+            };
+            this.isModalVisible = true;
+        },
 
-    viewAlbum(id) {
-        window.location = `/albumDashboard/${id}`;
-    }
-},
-components: {
-    Pagination,
-    BreezeAuthenticatedLayout,
-    Head,
-    AlbumForm,
-},
+        async loadAlbums(page = 1) {
+            try {
+                this.loading = true;
+                const response = await axios.get(`albumsList?page=${page}`);
+                this.albums = response.data.data;
+                this.pagination = response.data;
+            }
+            catch(error) {
+                console.error('Error loading images:', error);
+            }
+            finally {
+                this.loading = false;
+            }
+    
+        },
+        
+        async editAlbum(albumId) {
+            try {
+                this.loading = true;
+                const response = await axios.get(`albumShow/${albumId}`);
+                this.newAlbum = response.data;
+                this.isModalVisible = true;
+            }
+            catch(error) {
+                console.error('Error loading images:', error);
+            }
+            finally {
+                this.loading = false;
+            }
+        
+        },
+
+        async deleteAlbum(albumId) {
+            if (confirm('Are you sure you want to delete this album?')) {
+                try {
+                    this.loading = true;
+                    await axios.delete(`album/${albumId}`);
+                    this.loadAlbums();    
+                }
+                catch(error) {
+                    console.error('Error loading images:', error);
+                }
+                finally {
+                    this.loading = false;
+                }           
+            }
+        },
+
+        closeModal() {
+            this.isModalVisible = false;
+            this.newAlbum = {};
+            this.loadAlbums();
+        },
+
+        viewAlbum(id) {
+            window.location = `/albumDashboard/${id}`;
+        }
+    },
+    components: {
+        Pagination,
+        BreezeAuthenticatedLayout,
+        Head,
+        AlbumForm,
+        Loader
+    },
 };
   </script>
