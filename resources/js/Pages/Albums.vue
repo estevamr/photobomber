@@ -80,7 +80,12 @@ export default {
             };
             this.isModalVisible = true;
         },
-
+        
+        /**
+         * Loads albums from the server with pagination support.
+         *
+         * @param {number} page - The page number to load (default: 1).
+         */
         async loadAlbums(page = 1) {
             try {
                 this.loading = true;
@@ -96,7 +101,12 @@ export default {
             }
     
         },
-        
+
+        /**
+         * Loads album details for editing and displays the edit modal.
+         *
+         * @param {number} albumId - The ID of the album to edit.
+         */
         async editAlbum(albumId) {
             try {
                 this.loading = true;
@@ -113,6 +123,11 @@ export default {
         
         },
 
+        /**
+         * Deletes an album after confirming with the user and then reloads the album list.
+         *
+         * @param {number} albumId - The ID of the album to delete.
+         */
         async deleteAlbum(albumId) {
             if (confirm('Are you sure you want to delete this album?')) {
                 try {
@@ -128,13 +143,19 @@ export default {
                 }           
             }
         },
-
+        /**
+        * Closes the modal and resets the newAlbum object, then reloads the album list.
+        */
         closeModal() {
             this.isModalVisible = false;
             this.newAlbum = {};
             this.loadAlbums();
         },
-
+        /**
+         * Redirects the user to the album dashboard page.
+         *
+         * @param {number} id - The ID of the album to view.
+         */
         viewAlbum(id) {
             window.location = `/albumDashboard/${id}`;
         }

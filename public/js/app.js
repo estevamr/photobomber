@@ -13388,6 +13388,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       };
       this.isModalVisible = true;
     },
+    /**
+     * Loads albums from the server with pagination support.
+     *
+     * @param {number} page - The page number to load (default: 1).
+     */
     loadAlbums: function loadAlbums() {
       var _arguments = arguments,
         _this = this;
@@ -13422,6 +13427,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, null, [[1, 10, 13, 16]]);
       }))();
     },
+    /**
+     * Loads album details for editing and displays the edit modal.
+     *
+     * @param {number} albumId - The ID of the album to edit.
+     */
     editAlbum: function editAlbum(albumId) {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
@@ -13454,6 +13464,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2, null, [[0, 9, 12, 15]]);
       }))();
     },
+    /**
+     * Deletes an album after confirming with the user and then reloads the album list.
+     *
+     * @param {number} albumId - The ID of the album to delete.
+     */
     deleteAlbum: function deleteAlbum(albumId) {
       var _this3 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
@@ -13487,11 +13502,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3, null, [[1, 8, 11, 14]]);
       }))();
     },
+    /**
+    * Closes the modal and resets the newAlbum object, then reloads the album list.
+    */
     closeModal: function closeModal() {
       this.isModalVisible = false;
       this.newAlbum = {};
       this.loadAlbums();
     },
+    /**
+     * Redirects the user to the album dashboard page.
+     *
+     * @param {number} id - The ID of the album to view.
+     */
     viewAlbum: function viewAlbum(id) {
       window.location = "/albumDashboard/".concat(id);
     }
@@ -14073,10 +14096,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
+    /**
+     * Opens the side panel for a specific photo by setting the photoId and showSideTab properties.
+     *
+     * @param {number} id - The ID of the photo to open the side panel for.
+     */
     openPanel: function openPanel(id) {
       this.photoId = id;
       this.showSideTab = true;
     },
+    /**
+     * Deletes an image after confirming with the user and then reloads the image list.
+     *
+     * @param {number} mediaId - The ID of the image to delete.
+     */
     deleteImage: function deleteImage(mediaId) {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -14112,6 +14145,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, null, [[1, 9, 12, 15]]);
       }))();
     },
+    /**
+     * Loads images from the server with pagination support, 
+     * based on the current album context if there is any. 
+     * The idea is to re-use the component in the photo gallery context 
+     * and also in the add photos to album context 
+     */
     loadImages: function loadImages() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
@@ -14150,10 +14189,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2, null, [[2, 11, 14, 17]]);
       }))();
     },
+    /**
+     * Handles a click event on an album in the menu, updating the albumId and loading images associated with that album.
+     *
+     * @param {number} id - The ID of the clicked album.
+     */
     albumMenuClick: function albumMenuClick(id) {
       this.albumId = id;
       this.loadImages();
     },
+    /**
+     * Loads the list of albums from the server.
+     */
     loadAlbumList: function loadAlbumList() {
       var _this3 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
@@ -14185,6 +14232,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3, null, [[0, 8, 11, 14]]);
       }))();
     },
+    /**
+     * Adds a photo to an album, optionally specifying the photoId 
+     * (depending on the context, photo gallery vs album gallery), 
+     * and then reloads the image list.
+     *
+     * @param {number} albumId - The ID of the target album.
+     * @param {number|null} photoId - The ID of the photo to add to the album (default: null).
+     */
     addPhotoToAlbum: function addPhotoToAlbum(albumId) {
       var _arguments = arguments,
         _this4 = this;
@@ -14229,8 +14284,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   created: function created() {
+    // Load images and album list when the component is created.
     this.loadImages();
-    this.loadAlbumList();
+    //this.loadAlbumList();
   }
 });
 

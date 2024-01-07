@@ -41,7 +41,7 @@ Route::get('/albums/{albumId?}', function ($albumId=NULL) {
 
 
 Route::middleware('auth')->group(function () {
-    Route::post('/photos', UploadPhotoController::class);
+    
     Route::post('/upload', [UploadPhotoController::class, 'upload']);
     Route::get('/images', [UploadPhotoController::class, 'index']);
     Route::delete('/images/{id}', [UploadPhotoController::class, 'destroy']);

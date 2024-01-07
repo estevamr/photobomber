@@ -17,12 +17,19 @@ class AlbumCompilationWebhookController
     private const ALBUM_STATUS_FAILED = 'failed';
     private Album $album; 
 
+    /**
+     * Compile the album by processing and optimizing images via a third-party API.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function compileAlbum(Request $request)
     {
         // Check if the album is already in progress
         if ($this->getCurrentAlbumStatus($request->input('id')) === self::ALBUM_STATUS_IN_PROGRESS) {
             return response()->json(['error' => 'Album compilation is already in progress.'], 400);
         }
+
         // Update the album status to in progress
         $this->updateAlbumStatus(self::ALBUM_STATUS_IN_PROGRESS);
 
@@ -32,14 +39,14 @@ class AlbumCompilationWebhookController
                 'images' => $request->input('images'),
                 // Other parameters as needed
             ]);
-            
+
             // Check if the API call was successful
             if ($response->successful()) {
                 // Update the album status to completed
                 $this->updateAlbumStatus(self::ALBUM_STATUS_COMPLETED);
 
-                // Perform any additional actions on successful compilation
-                $userEmail = $request->user()->email; // Replace with the user's email address
+                // Email the user to notify that the album compilation process is done
+                $userEmail = $request->user()->email; 
 
                 Mail::to($userEmail)->send(new CompilationDoneEmail);
 
@@ -64,18 +71,28 @@ class AlbumCompilationWebhookController
         }
     }
 
+    /**
+     * Get the current status of the specified album.
+     *
+     * @param int $albumId
+     * @return string
+     */
     private function getCurrentAlbumStatus($albumId)
     {
-        // Logic to retrieve the current album status from your storage (e.g., database)
+        // Logic to retrieve the current album status from database
         // Return self::ALBUM_STATUS_IN_PROGRESS, self::ALBUM_STATUS_COMPLETED, or self::ALBUM_STATUS_FAILED
         $this->album = Album::findOrFail($albumId);
         return $this->album->status;
-
     }
 
+    /**
+     * Update the status of the current album.
+     *
+     * @param string $status
+     * @return void
+     */
     private function updateAlbumStatus($status)
     {
-        // Logic to update the album status in your storage (e.g., database)
-        $this->album->update(['status'=> $status]);
+        $this->album->update(['status' => $status]);
     }
 }

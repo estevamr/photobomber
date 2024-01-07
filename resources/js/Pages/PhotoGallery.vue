@@ -85,11 +85,21 @@ export default {
     },
 
     methods: {
+        /**
+         * Opens the side panel for a specific photo by setting the photoId and showSideTab properties.
+         *
+         * @param {number} id - The ID of the photo to open the side panel for.
+         */
         openPanel(id) {
             this.photoId = id;
             this.showSideTab = true;
         },
         
+        /**
+         * Deletes an image after confirming with the user and then reloads the image list.
+         *
+         * @param {number} mediaId - The ID of the image to delete.
+         */
         async deleteImage(mediaId) {
             if (confirm('Are you sure you want to delete this image?')) {
                 try {
@@ -106,7 +116,12 @@ export default {
                 
             }
         },
-
+        /**
+         * Loads images from the server with pagination support, 
+         * based on the current album context if there is any. 
+         * The idea is to re-use the component in the photo gallery context 
+         * and also in the add photos to album context 
+         */
         async loadImages() {
             let url = null;
             if(this.albumInTheContext) {
@@ -129,12 +144,20 @@ export default {
                 this.loading = false;
             }
         },
-
+        
+        /**
+         * Handles a click event on an album in the menu, updating the albumId and loading images associated with that album.
+         *
+         * @param {number} id - The ID of the clicked album.
+         */
         albumMenuClick(id) {
             this.albumId = id;
             this.loadImages();
         },
 
+        /**
+         * Loads the list of albums from the server.
+         */
         async loadAlbumList() {
             try {
                 this.loading = true;
@@ -150,6 +173,14 @@ export default {
             }     
         },
 
+        /**
+         * Adds a photo to an album, optionally specifying the photoId 
+         * (depending on the context, photo gallery vs album gallery), 
+         * and then reloads the image list.
+         *
+         * @param {number} albumId - The ID of the target album.
+         * @param {number|null} photoId - The ID of the photo to add to the album (default: null).
+         */
         async addPhotoToAlbum(albumId, photoId = null) {
             const formData = {
                 'albumId': albumId,
@@ -176,8 +207,9 @@ export default {
         }
     },
     created() {
+        // Load images and album list when the component is created.
         this.loadImages();
-        this.loadAlbumList();
+        //this.loadAlbumList();
     },
 }
 </script>

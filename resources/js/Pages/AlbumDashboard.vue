@@ -44,7 +44,6 @@
     <!-- Modal Dialog -->
     <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 max-h-screen">
         <div class="bg-white p-8 max-w-2xl mx-auto rounded-md">
-            <!-- <h2 class="text-2xl font-bold mb-4">Modal Title</h2> -->
             <!-- Modal Content -->
             <PhotoGallery :albumInTheContext="albumId"/>
             <!-- Close Button -->
@@ -92,6 +91,9 @@ export default {
     },
 
     methods: {
+        /**
+         * Fetches photos associated with a specific album from the server with pagination support.
+         */
         async fetchPhotos() {
             const apiUrl = `albumPhotos/${this.albumId}?page=${this.currentPage}&per_page=${this.perPage}`;
             try {
@@ -107,7 +109,11 @@ export default {
                 this.loading = false;
             }
         },
-
+        /**
+         * Removes a photo from the current album and reloads the photo list.
+         *
+         * @param {number} photoId - The ID of the photo to remove from the album.
+         */
         async removeFromAlbum(photoId) {
             this.loading = true;
             const apiUrl = `/album/remove/${photoId}/${this.albumId}`;
@@ -122,6 +128,10 @@ export default {
                 this.loading = false;
             }
         },
+        /**
+         * Compiles the current album, triggering a compilation process on the server.
+         * Displays an alert on error.
+         */
         async compileAlbum() {
             try {
                 if (this.albumId) {
@@ -136,6 +146,9 @@ export default {
             }
             
         },
+         /**
+         * Closes the modal and fetches the updated photo list.
+         */
         closeModal() {
             this.fetchPhotos();
             this.isModalOpen=false;

@@ -156,7 +156,7 @@ class AlbumController extends Controller
     }
 
     /**
-     * Retrieve paginated photos for a specific album
+     * Retrieve paginated photos that are still not added in a specific album
      *
      * @param int|null $id
      * @return \Illuminate\Http\JsonResponse

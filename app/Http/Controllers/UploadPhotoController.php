@@ -10,19 +10,17 @@ use App\Http\Requests\PhotoRequest;
 
 class UploadPhotoController extends Controller
 {
-    public function __invoke(Request $request)
-    {
-        /** @var User $user */
-        $user = $request->user();
-
-        $path = $request->file('photo')->store('photos');
-
-        return $user->photos()->create(['path' => $path]);
-    }
-    
+    /**
+     * Retrieve paginated images belonging to the authenticated user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
+        // Get the number of images per page from the request, default to 6
         $perPage = $request->get('per_page', 6);
+        // Retrieve the authenticated user
         $user = $request->user();
         $images = $user->photos()->paginate($perPage);        
         return response()->json($images);
