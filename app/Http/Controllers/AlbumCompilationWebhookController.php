@@ -12,9 +12,9 @@ use App\Mail\CompilationDoneEmail;
 
 class AlbumCompilationWebhookController
 {
-    private const ALBUM_STATUS_IN_PROGRESS = 'in_progress';
-    private const ALBUM_STATUS_COMPLETED = 'completed';
-    private const ALBUM_STATUS_FAILED = 'failed';
+    public const ALBUM_STATUS_IN_PROGRESS = 'in_progress';
+    public const ALBUM_STATUS_COMPLETED = 'completed';
+    public const ALBUM_STATUS_FAILED = 'failed';
     private Album $album; 
 
     /**
