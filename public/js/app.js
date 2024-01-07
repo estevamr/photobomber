@@ -14249,10 +14249,16 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       photos: [],
       totalItems: 0,
       perPage: 6,
-      currentPage: 1
+      currentPage: 1,
+      showSideTab: false,
+      photoId: null
     };
   },
   methods: {
+    openPanel: function openPanel(id) {
+      this.photoId = id;
+      this.showSideTab = true;
+    },
     deleteImage: function deleteImage(mediaId) {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -14356,20 +14362,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3, null, [[0, 8, 11, 14]]);
       }))();
     },
-    addPhotoToAlbum: function addPhotoToAlbum(event, photoId) {
+    addPhotoToAlbum: function addPhotoToAlbum(albumId) {
       var _this4 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
         var formData;
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
-              if (!event.target.value) {
-                _context4.next = 14;
+              if (!albumId) {
+                _context4.next = 16;
                 break;
               }
               formData = {
-                'albumId': event.target.value,
-                'photoId': photoId
+                'albumId': albumId,
+                'photoId': _this4.photoId
               };
               _context4.prev = 2;
               _this4.loading = true;
@@ -14380,21 +14386,23 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 }
               });
             case 6:
-              _context4.next = 11;
+              _context4.next = 12;
               break;
             case 8:
               _context4.prev = 8;
               _context4.t0 = _context4["catch"](2);
+              alert(_context4.t0.response.data.error);
               console.error('Error while adding photos: ', _context4.t0);
-            case 11:
-              _context4.prev = 11;
+            case 12:
+              _context4.prev = 12;
               _this4.loading = false;
-              return _context4.finish(11);
-            case 14:
+              _this4.showSideTab = false;
+              return _context4.finish(12);
+            case 16:
             case "end":
               return _context4.stop();
           }
-        }, _callee4, null, [[2, 8, 11, 14]]);
+        }, _callee4, null, [[2, 8, 12, 16]]);
       }))();
     }
   },
@@ -15953,12 +15961,39 @@ var _hoisted_4 = {
   "class": "absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 hidden group-hover:flex flex-col items-center justify-center"
 };
 var _hoisted_5 = ["onClick"];
-var _hoisted_6 = {
+var _hoisted_6 = ["onClick"];
+var _hoisted_7 = {
   "class": "flex items-center justify-center"
 };
-var _hoisted_7 = {
+var _hoisted_8 = {
   "class": "w-1/2 inset-0 flex items-center justify-center"
 };
+var _hoisted_9 = {
+  key: 0,
+  "class": "fixed top-0 right-0 bottom-0 w-1/4 bg-gray-200 p-4"
+};
+var _hoisted_10 = {
+  "class": "flex justify-end"
+};
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+  fill: "none",
+  stroke: "black",
+  "stroke-linecap": "round",
+  "stroke-linejoin": "round",
+  "stroke-width": "2",
+  viewBox: "0 0 24 24",
+  "class": "w-6 h-6"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("path", {
+  d: "M6 18L18 6M6 6l12 12"
+})], -1 /* HOISTED */);
+var _hoisted_12 = [_hoisted_11];
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h2", {
+  "class": "text-xl font-bold mb-4"
+}, "Please select an album", -1 /* HOISTED */);
+var _hoisted_14 = {
+  "class": "max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400 cursor-pointer"
+};
+var _hoisted_15 = ["onClick"];
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_Loader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("Loader");
   var _component_PhotoUploadForm = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PhotoUploadForm");
@@ -15977,11 +16012,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "rounded-md w-full h-48 object-cover transition-transform transform group-hover:scale-110"
     }, null, 8 /* PROPS */, _hoisted_3), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Menu "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_4, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       onClick: function onClick($event) {
+        return $options.openPanel(photo.id);
+      },
+      "class": "cursor-pointer text-white font-bold"
+    }, "Add to album", 8 /* PROPS */, _hoisted_5), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+      onClick: function onClick($event) {
         return $options.deleteImage(photo.id);
       },
       "class": "cursor-pointer text-white font-bold"
-    }, "Delete", 8 /* PROPS */, _hoisted_5)])]);
-  }), 128 /* KEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_6, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Pagination, {
+    }, "Delete", 8 /* PROPS */, _hoisted_6)])]);
+  }), 128 /* KEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Pagination, {
     "per-page": $data.perPage,
     records: $data.totalItems,
     modelValue: $data.currentPage,
@@ -15989,7 +16029,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $data.currentPage = $event;
     }),
     onPaginate: $options.loadImages
-  }, null, 8 /* PROPS */, ["per-page", "records", "modelValue", "onPaginate"])])])], 64 /* STABLE_FRAGMENT */);
+  }, null, 8 /* PROPS */, ["per-page", "records", "modelValue", "onPaginate"])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Side panel "), $data.showSideTab ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    onClick: _cache[1] || (_cache[1] = function () {
+      return _ctx.closeSidePanel && _ctx.closeSidePanel.apply(_ctx, arguments);
+    }),
+    "class": "text-red"
+  }, _hoisted_12)]), _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_14, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($data.albumList, function (album) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", {
+      onClick: function onClick($event) {
+        return $options.addPhotoToAlbum(album.id);
+      }
+    }, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(album.title), 9 /* TEXT, PROPS */, _hoisted_15);
+  }), 256 /* UNKEYED_FRAGMENT */))])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)], 64 /* STABLE_FRAGMENT */);
 }
 
 /***/ }),

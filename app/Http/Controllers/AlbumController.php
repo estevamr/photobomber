@@ -84,10 +84,13 @@ class AlbumController extends Controller
     public function addPhotoToAlbum(Request $request)
     {
         $album = Album::findOrFail($request->input('albumId'));
-        $photo = Photo::findOrFail($request->input('photoId'));       
-        return response()->json(
-            $album->photos()->attach($photo)
-        );     
+        $photo = Photo::findOrFail($request->input('photoId'));  
+        if (!$album->photos->contains($request->input('photoId'))) {  
+            return response()->json(
+                $album->photos()->attach($photo)
+            );   
+        } 
+        return response()->json(['error' => 'Photo is already in the album.'], 400);
     }
 
     /**
