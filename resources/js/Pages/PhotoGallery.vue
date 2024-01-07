@@ -115,7 +115,6 @@ export default {
             else {
                 url = `${this.baseUrl}/images?page=${this.currentPage}&per_page=${this.perPage}`;
             }
-            console.log(this.albumInTheContext, url);
             try {
                 this.loading = true;
                 const response = await axios.get(url);

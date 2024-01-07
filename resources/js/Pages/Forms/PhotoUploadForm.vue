@@ -57,11 +57,7 @@ export default {
                 this.$emit('loadImages');
             }
             catch(error) {
-                if (error.response.status === 422) {
-                    this.errors = Object.values(error.response.data.errors);
-                } else {
-                        // Handle other errors
-                }
+                this.errors = Object.values(error.response.data.errors);
             }                
         },
     },

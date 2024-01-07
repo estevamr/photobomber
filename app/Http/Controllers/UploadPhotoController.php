@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Models\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-
+use App\Http\Requests\PhotoRequest;
 
 class UploadPhotoController extends Controller
 {
@@ -29,11 +29,10 @@ class UploadPhotoController extends Controller
     }
 
 
-    public function upload(Request $request)
+    public function upload(PhotoRequest $request)
     {
-        $request->validate([
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+           // Validate the request using the PhotoUploadRequest
+        $validatedData = $request->validated();
 
         $images = [];
         $user = $request->user();

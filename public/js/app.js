@@ -14011,11 +14011,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 9:
               _context.prev = 9;
               _context.t0 = _context["catch"](2);
-              if (_context.t0.response.status === 422) {
-                _this.errors = Object.values(_context.t0.response.data.errors);
-              } else {
-                // Handle other errors
-              }
+              _this.errors = Object.values(_context.t0.response.data.errors);
             case 12:
             case "end":
               return _context.stop();
