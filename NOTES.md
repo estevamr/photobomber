@@ -8,11 +8,12 @@ Photo Gallery is the place for uploading photos and manage them by adding to an 
 Album Gallery is where I list all albums. It can go down to the album details section, where I would compile album, change info, etc.
 
 For the frontend, a few considerations:
-- Not very familiar to tailwind css
+- I am not very familiar to tailwind css it took me a few hours to learn
 - I tried to make reusable components as much as I could
 - I created componets for forms, in case i need to reuse
 - I reuse the photo gallery component in two different contexts: see all photos and also to add photos to a specific album. For that I am relying on a prop, albumId
 - I didnt use Breeze for forms, just to save some time
+- In the photo gallery, I was wondering what would be the best way to the users add the photo to an album, so I decided to go with a right panel
 
 
 For the backend
