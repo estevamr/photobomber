@@ -209,7 +209,7 @@ export default {
     created() {
         // Load images and album list when the component is created.
         this.loadImages();
-        //this.loadAlbumList();
+        this.loadAlbumList();
     },
 }
 </script>

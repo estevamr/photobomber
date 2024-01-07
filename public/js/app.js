@@ -13220,6 +13220,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   methods: {
+    /**
+     * Fetches photos associated with a specific album from the server with pagination support.
+     */
     fetchPhotos: function fetchPhotos() {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -13253,6 +13256,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, null, [[1, 10, 13, 16]]);
       }))();
     },
+    /**
+     * Removes a photo from the current album and reloads the photo list.
+     *
+     * @param {number} photoId - The ID of the photo to remove from the album.
+     */
     removeFromAlbum: function removeFromAlbum(photoId) {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
@@ -13285,6 +13293,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2, null, [[2, 9, 12, 15]]);
       }))();
     },
+    /**
+     * Compiles the current album, triggering a compilation process on the server.
+     * Displays an alert on error.
+     */
     compileAlbum: function compileAlbum() {
       var _this3 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
@@ -13320,6 +13332,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3, null, [[0, 8, 11, 14]]);
       }))();
     },
+    /**
+    * Closes the modal and fetches the updated photo list.
+    */
     closeModal: function closeModal() {
       this.fetchPhotos();
       this.isModalOpen = false;
@@ -14286,7 +14301,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   created: function created() {
     // Load images and album list when the component is created.
     this.loadImages();
-    //this.loadAlbumList();
+    this.loadAlbumList();
   }
 });
 
@@ -14982,7 +14997,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
           return $data.currentPage = $event;
         }),
         onPaginate: $options.fetchPhotos
-      }, null, 8 /* PROPS */, ["per-page", "records", "modelValue", "onPaginate"])])])])]), $data.isModalOpen ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <h2 class=\"text-2xl font-bold mb-4\">Modal Title</h2> "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Modal Content "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PhotoGallery, {
+      }, null, 8 /* PROPS */, ["per-page", "records", "modelValue", "onPaginate"])])])])]), $data.isModalOpen ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_13, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Modal Content "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PhotoGallery, {
         albumInTheContext: $props.albumId
       }, null, 8 /* PROPS */, ["albumInTheContext"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Close Button "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
         onClick: _cache[3] || (_cache[3] = function () {
