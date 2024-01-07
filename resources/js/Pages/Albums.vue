@@ -1,5 +1,4 @@
-<!-- resources/js/components/AlbumCRUD.vue -->
-
+<!-- resources/js/components/Album.vue -->
 <template>
     <Head title="Dashboard" />
     <BreezeAuthenticatedLayout>

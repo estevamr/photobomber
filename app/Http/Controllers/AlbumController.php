@@ -154,4 +154,23 @@ class AlbumController extends Controller
             $album->photos()->detach($photo)
         );     
     }
+
+    /**
+     * Retrieve paginated photos for a specific album
+     *
+     * @param int|null $id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function photosNotInAlbum($albumId)
+    {
+        // Get the album
+        $album = Album::findOrFail($albumId);
+
+        // Get all photos that are not in the album
+        $photosNotInAlbum = Photo::whereDoesntHave('albums', function ($query) use ($albumId) {
+            $query->where('album_id', $albumId);
+        })->paginate();
+
+        return response()->json($photosNotInAlbum);
+    }
 }

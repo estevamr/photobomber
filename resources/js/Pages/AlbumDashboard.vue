@@ -1,3 +1,4 @@
+<!-- resources/js/components/AlbumDashboard.vue -->
 <template>
     <Head title="Dashboard" />
     <BreezeAuthenticatedLayout>
@@ -9,6 +10,10 @@
                 <button @click="compileAlbum" class="bg-gray-900 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 float-right">
                     Compile
                 </button>
+                <button @click="isModalOpen=true" class="bg-gray-900 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800 float-right">
+                    Add Photos
+                </button>
+                
             </div>            
         </template>
         <Loader :loading="loading"/>
@@ -17,7 +22,7 @@
                 <div class="grid grid-cols-3 md:grid-cols-3 gap-8">
                     <div v-for="(photo, index) in photos" :key="index" class="bg-white rounded-lg shadow-lg p-2">
                         <div class="relative overflow-hidden group">
-                            <img class="object-cover w-full max-h-64" :src="baseUrl+'/uploads/' + photo.path"/>
+                            <img class="object-cover w-full max-h-64" :src="`${baseUrl}/uploads/${photo.path}`"/>
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <button @click="removeFromAlbum(photo.id)" class="bg-white text-gray-900 py-2 px-6 rounded-full font-bold hover:bg-gray-300 hidden group-hover:block">Remove</button>
                             </div>
@@ -36,7 +41,18 @@
                 </div>
             </div>
         </div>
-        
+    <!-- Modal Dialog -->
+    <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 max-h-screen">
+        <div class="bg-white p-8 max-w-2xl mx-auto rounded-md">
+            <!-- <h2 class="text-2xl font-bold mb-4">Modal Title</h2> -->
+            <!-- Modal Content -->
+            <PhotoGallery :albumInTheContext="albumId"/>
+            <!-- Close Button -->
+            <button @click="closeModal" class="mt-4 p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md">
+            Close Modal
+            </button>
+        </div>
+    </div>
     </BreezeAuthenticatedLayout>    
 </template>
 <script>
@@ -45,6 +61,8 @@ import Loader from '@/Components/Loader.vue';
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import { Head } from '@inertiajs/vue3';
 import Pagination from 'v-pagination-3';
+import PhotoGallery from './PhotoGallery.vue';
+
 
 export default { 
     props: {
@@ -59,6 +77,7 @@ export default {
             perPage: 0,
             currentPage: 1,
             loading: false,
+            isModalOpen: false,
         };
     },
     mounted() {
@@ -117,12 +136,18 @@ export default {
             }
             
         },
+        closeModal() {
+            this.fetchPhotos();
+            this.isModalOpen=false;
+
+        }
     },
     components: {
         BreezeAuthenticatedLayout,
         Head,
         Pagination,
-        Loader
+        Loader,
+        PhotoGallery
     },
 }
 </script>

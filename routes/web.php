@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/albumDashboard/{id}', [AlbumController::class, 'albumDashboard']);
     Route::get('/albumPhotos/{id}', [AlbumController::class, 'getAlbumPhotos']);
+    Route::get('/photosNotInAlbum/{id}', [AlbumController::class, 'photosNotInAlbum']);
     Route::delete('/album/remove/{id}/{id2}', [AlbumController::class, 'removePhotoFromAlbum']);
 
     Route::put('/compileAlbum', [AlbumCompilationWebhookController::class, 'compileAlbum']);

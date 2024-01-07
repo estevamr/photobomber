@@ -1,3 +1,4 @@
+<!-- resources/js/components/PhotoGallery.vue -->
 <template>
    <Loader :loading="loading"/>
     <div>
@@ -7,12 +8,16 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <!-- Loop through the photos and display them -->
             <div v-for="photo in photos" :key="photo.id" class="relative group">
-                <img :src="`uploads/${photo.path}`" alt="Photo" class="rounded-md w-full h-48 object-cover transition-transform transform group-hover:scale-110">
+                <img :src="`${this.baseUrl}/uploads/${photo.path}`" alt="Photo" class="rounded-md w-full h-48 object-cover transition-transform transform group-hover:scale-110">
                 <!-- Menu -->
-                <div  class="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 hidden group-hover:flex flex-col items-center justify-center">
+                <div v-if="!albumInTheContext" class="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 hidden group-hover:flex flex-col items-center justify-center">
                     <a  @click="openPanel(photo.id)" class="cursor-pointer text-white font-bold">Add to album</a>
                     <a  @click="deleteImage(photo.id)" class="cursor-pointer text-white font-bold">Delete</a>
                 </div>
+                <div v-else class="absolute top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 hidden group-hover:flex flex-col items-center justify-center">
+                    <a  @click="addPhotoToAlbum(albumInTheContext, photo.id)" class="cursor-pointer text-white font-bold">Add to album</a>
+                </div>
+
             </div>
         </div>
     </div>
@@ -54,6 +59,9 @@ import Pagination from 'v-pagination-3';
 
 
 export default {
+    props: {
+        albumInTheContext: null
+    },
     components: {
         PhotoUploadForm,
         BreezeButton,
@@ -62,11 +70,10 @@ export default {
     },
     data() {
         return {
-           
+            baseUrl: window.location.origin,
             albumList: [],
             albumId: 0,
             loading: false,
-
             photos: [],
             totalItems: 0,
             perPage: 6,
@@ -87,7 +94,7 @@ export default {
             if (confirm('Are you sure you want to delete this image?')) {
                 try {
                     this.loading = true;
-                    const response = await axios.delete(`images/${mediaId}`);
+                    const response = await axios.delete(`${this.baseUrl}/images/${mediaId}`);
                     this.loadImages();
                 }
                 catch(error) {
@@ -101,7 +108,14 @@ export default {
         },
 
         async loadImages() {
-            const url = `images?page=${this.currentPage}&per_page=${this.perPage}`;
+            let url = null;
+            if(this.albumInTheContext) {
+                url = `${this.baseUrl}/photosNotInAlbum/${this.albumInTheContext}/?page=${this.currentPage}&per_page=${this.perPage}`;
+            } 
+            else {
+                url = `${this.baseUrl}/images?page=${this.currentPage}&per_page=${this.perPage}`;
+            }
+            console.log(this.albumInTheContext, url);
             try {
                 this.loading = true;
                 const response = await axios.get(url);
@@ -125,7 +139,7 @@ export default {
         async loadAlbumList() {
             try {
                 this.loading = true;
-                const response = await axios.get('albumsList');
+                const response = await axios.get(`${this.baseUrl}/albumsList`);
                 this.albumList = response.data.data;
       
             }
@@ -136,29 +150,30 @@ export default {
                 this.loading = false;
             }     
         },
-        async addPhotoToAlbum(albumId) {
-            if (albumId) {
-                const formData = {
-                    'albumId':albumId,
-                    'photoId': this.photoId
-                };
-                try {
-                    this.loading = true;
-                    await axios.post('/addPhotoToAlbum', formData, {
-                        headers: {
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    });
-                }
-                catch(error) {
-                    alert(error.response.data.error);
-                    console.error('Error while adding photos: ', error);
-                }
-                finally {
-                    this.loading = false;
-                    this.showSideTab = false;
-                }    
-            }                        
+
+        async addPhotoToAlbum(albumId, photoId = null) {
+            const formData = {
+                'albumId': albumId,
+                'photoId': photoId || this.photoId
+            };
+            try {
+                this.loading = true;
+                await axios.post(`${this.baseUrl}/addPhotoToAlbum`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                this.loadImages();
+            }
+            catch(error) {
+                alert(error.response.data.error);
+                console.error('Error while adding photos: ', error);
+            }
+            finally {
+                this.loading = false;
+                this.showSideTab = false;
+            }    
+                                
         }
     },
     created() {
