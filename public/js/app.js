@@ -14125,30 +14125,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               } else {
                 url = "".concat(_this2.baseUrl, "/images?page=").concat(_this2.currentPage, "&per_page=").concat(_this2.perPage);
               }
-              console.log(_this2.albumInTheContext, url);
-              _context2.prev = 3;
+              _context2.prev = 2;
               _this2.loading = true;
-              _context2.next = 7;
+              _context2.next = 6;
               return axios.get(url);
-            case 7:
+            case 6:
               response = _context2.sent;
               _this2.totalItems = response.data.total;
               _this2.photos = response.data.data;
-              _context2.next = 15;
+              _context2.next = 14;
               break;
-            case 12:
-              _context2.prev = 12;
-              _context2.t0 = _context2["catch"](3);
+            case 11:
+              _context2.prev = 11;
+              _context2.t0 = _context2["catch"](2);
               console.error('Error loading images:', _context2.t0);
-            case 15:
-              _context2.prev = 15;
+            case 14:
+              _context2.prev = 14;
               _this2.loading = false;
-              return _context2.finish(15);
-            case 18:
+              return _context2.finish(14);
+            case 17:
             case "end":
               return _context2.stop();
           }
-        }, _callee2, null, [[3, 12, 15, 18]]);
+        }, _callee2, null, [[2, 11, 14, 17]]);
       }))();
     },
     albumMenuClick: function albumMenuClick(id) {
@@ -14982,7 +14981,7 @@ var _hoisted_9 = {
 };
 var _hoisted_10 = ["onClick"];
 var _hoisted_11 = {
-  "class": "inset-0 align-text-bottom"
+  "class": "inset-0 align-text-bottom px-2"
 };
 var _hoisted_12 = {
   "class": "text-xl font-bold text-gray-900 mt-4"

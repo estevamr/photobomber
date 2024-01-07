@@ -24,12 +24,12 @@
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <button @click="viewAlbum(album.id)" class="bg-white text-gray-900 py-2 px-6 rounded-full font-bold hover:bg-gray-300">View Album</button>
                             </div>
-                            <div class="inset-0 align-text-bottom">
+                            <div class="inset-0 align-text-bottom px-2">
                                 <span>Photos: {{ album.photos.length }}</span>
                             </div>
                         </div>
                         <h3 class="text-xl font-bold text-gray-900 mt-4">{{  album.title }}</h3>
-                        <p class="text-gray-500 text-sm mt-2">{{  album.description }}</p>
+                        <p class="text-gray-500 text-sm mt-2 ">{{  album.description }}</p>
                         <div class="flex items-center justify-between mt-4">
                             <span class="text-gray-900 font-bold text-lg hover:text-blue-700 cursor-pointer" @click="deleteAlbum(album.id)">Delete</span>
                             <button class="bg-gray-900 text-white py-2 px-4 rounded-full font-bold hover:bg-gray-800" @click="editAlbum(album.id)">Edit</button>

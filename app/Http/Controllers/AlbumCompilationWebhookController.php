@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+
 use App\Models\Album;
+use App\Mail\CompilationDoneEmail;
 
 class AlbumCompilationWebhookController
 {
@@ -36,7 +39,9 @@ class AlbumCompilationWebhookController
                 $this->updateAlbumStatus(self::ALBUM_STATUS_COMPLETED);
 
                 // Perform any additional actions on successful compilation
-                // For example: Notify user, save results, etc.
+                $userEmail = $request->user()->email; // Replace with the user's email address
+
+                Mail::to($userEmail)->send(new CompilationDoneEmail);
 
                 return response()->json(['message' => 'Album compilation completed successfully.']);
             } else {
